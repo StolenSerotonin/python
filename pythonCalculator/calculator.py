@@ -1,59 +1,85 @@
 import math as m
 from tkinter import *
 
+# Create the main window
 window = Tk()
 window.title("Calculator")
 window.configure(bg="grey")
 window.geometry("400x600")
 window.resizable(True, True)
 
-bHeight = 0
-bWidth = 0
-bPadX = 0
-bPadY = 0
-
 # Create a frame with a border
 frame = Frame(window, bg="grey",borderwidth=5 ,relief="solid")
 frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
-label_font = ("Courier", 24, "bold")
-e = Entry(frame, text="0", fg="green", bg="black", font=label_font, borderwidth=15)
+# Create entry box
+e_font = ("Courier", 24, "bold")
+e = Entry(frame, text="0", fg="green", bg="black", font=e_font, borderwidth=15)
 
-def button_add():
-    return
+# Create functions for buttons
+def button_click(number):
+    current = e.get()
+    e.delete(0, END)
+    e.insert(0, str(current) + str(number))
 
-add = Button(frame, text="+", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-subtract = Button(frame, text="-", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-multiply = Button(frame, text="*", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-divide = Button(frame, text="/", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-one = Button(frame, text="1", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-two = Button(frame, text="2", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-three = Button(frame, text="3", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-four = Button(frame, text="4", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-five = Button(frame, text="5", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-six = Button(frame, text="6", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-seven = Button(frame, text="7", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-eight = Button(frame, text="8", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-nine = Button(frame, text="9", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-zero = Button(frame, text="0", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-decimal = Button(frame, text=".", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-equals = Button(frame, text="=", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-clear = Button(frame, text="C", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-delete = Button(frame, text="DEL", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-square = Button(frame, text="x^2", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-sqrt = Button(frame, text="sqrt", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-openParen = Button(frame, text="(", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
-closeParen = Button(frame, text=")", height=bHeight, width=bWidth, padx=bPadX, pady=bPadY, command=button_add)
+def button_clear():
+    e.delete(0, END)
+    
+def button_function(func):
+    global first_number
+    global operator
+    first_number = e.get()
+    operator = func
+    e.delete(0, END)
+    
+def button_equals():
+    second_number = e.get()
+    e.delete(0, END)
+    if operator == "+" and first_number == str(9) and second_number == str(10):
+        e.insert(0, 21)
+    elif operator == "+":
+        e.insert(0, str(float(first_number) + float(second_number)))
+    elif operator == "-":
+        e.insert(0, str(float(first_number) - float(second_number)))
+    elif operator == "*":
+        e.insert(0, str(float(first_number) * float(second_number)))
+    elif operator == "/":
+        e.insert(0, str(float(first_number) / float(second_number)))
 
-# Configure the grid to allow dynamic resizing
+# Create buttons
+add = Button(frame, text="+", command=lambda: button_function("+"))
+subtract = Button(frame, text="-", command=lambda: button_function("-"))
+multiply = Button(frame, text="*", command=lambda: button_function("*"))
+divide = Button(frame, text="/", command=lambda: button_function("/"))
+one = Button(frame, text="1", command=lambda: button_click(1))
+two = Button(frame, text="2", command=lambda: button_click(2))
+three = Button(frame, text="3", command=lambda: button_click(3))
+four = Button(frame, text="4", command=lambda: button_click(4))
+five = Button(frame, text="5", command=lambda: button_click(5))
+six = Button(frame, text="6", command=lambda: button_click(6))
+seven = Button(frame, text="7", command=lambda: button_click(7))
+eight = Button(frame, text="8", command=lambda: button_click(8))
+nine = Button(frame, text="9", command=lambda: button_click(9))
+zero = Button(frame, text="0", command=lambda: button_click(0))
+decimal = Button(frame, text=".", command=lambda: button_click())
+equals = Button(frame, text="=", command=lambda: button_equals())
+clear = Button(frame, text="C", command=lambda: button_clear())
+delete = Button(frame, text="DEL", command=lambda: button_click())
+square = Button(frame, text="x^2", command=lambda: button_click())
+sqrt = Button(frame, text="sqrt", command=lambda: button_click())
+openParen = Button(frame, text="(", command=lambda: button_click())
+closeParen = Button(frame, text=")", command=lambda: button_click())
+
+# Configure the frame to allow dynamic resizing
 for i in range(5):
     frame.grid_rowconfigure(i, weight=1)
 for j in range(4):
     frame.grid_columnconfigure(j, weight=1)
-    
+# Same for window
 window.grid_rowconfigure(0, weight=1)
 window.grid_columnconfigure(0, weight=1)
     
+# Place the widgets in the frame
 e.grid(row=0, column=0, columnspan=4, sticky="nsew")
 
 add.grid(row=1, column=3, sticky="nsew")
