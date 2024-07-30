@@ -12,15 +12,32 @@ window.resizable(True, True)
 frame = Frame(window, bg="grey",borderwidth=5 ,relief="solid")
 frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
+# Global variables ew yucky
+bypass_val = False
+first_number = None
+operator = None
+
+# Entry validation
+def validate_input(char):
+    if bypass_val: return True
+    elif char.isdigit() or char == ".":
+        return True
+    return False
+
+validate_cmd = window.register(validate_input)
+
 # Create entry box
 e_font = ("Courier", 24, "bold")
-e = Entry(frame, text="0", fg="green", bg="black", font=e_font, borderwidth=15)
+e = Entry(frame, fg="green", bg="black", font=e_font, borderwidth=15, validate="key", validatecommand=(validate_cmd, "%S"))
 
 # Create functions for buttons
 def button_click(number):
+    global bypass_val
     current = e.get()
     e.delete(0, END)
+    bypass_val = True
     e.insert(0, str(current) + str(number))
+    bypass_val = False
 
 def button_clear():
     e.delete(0, END)
@@ -33,10 +50,16 @@ def button_function(func):
     e.delete(0, END)
     
 def button_equals():
+    global bypass_val
     second_number = e.get()
     e.delete(0, END)
-    if operator == "+" and first_number == str(9) and second_number == str(10):
-        e.insert(0, 21)
+    bypass_val = True
+    if operator == None:
+        e.insert(0, 0)
+    elif second_number == "":
+        e.insert(0, 0)
+    elif operator == "+" and first_number == str(9) and second_number == str(10):
+        e.insert(0, str(21))
     elif operator == "+":
         e.insert(0, str(float(first_number) + float(second_number)))
     elif operator == "-":
@@ -45,6 +68,7 @@ def button_equals():
         e.insert(0, str(float(first_number) * float(second_number)))
     elif operator == "/":
         e.insert(0, str(float(first_number) / float(second_number)))
+    bypass_val = False
 
 # Create buttons
 bFont = ("Courier", 14, "bold")
